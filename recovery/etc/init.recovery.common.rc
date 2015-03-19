@@ -1,0 +1,25 @@
+###########################
+# init.recovery.common.rc #
+###########################
+on init
+    # pstore/ramoops previous console log
+    mount pstore pstore /sys/fs/pstore
+    chown system log /sys/fs/pstore/console-ramoops
+    chmod 0440 /sys/fs/pstore/console-ramoops
+
+on fs
+    mkdir /devlog 0700 root root
+    wait /dev/block/bootdevice/by-name/devlog
+    e2fsck /dev/block/bootdevice/by-name/devlog
+    mount ext4 /dev/block/bootdevice/by-name/devlog /devlog nosuid nodev barrier=1,errors=continue
+    mkdir /devlog/recovery 0775 root root
+
+    # create /cota and /preload folder for recovery binary to mount
+    mkdir /cota 0771 root cw_access
+    mkdir /preload 0771 root cw_access
+
+on boot
+    # Workaround for HTC; the recovery is disabled
+    # by default in HTC's bootable/recovery/etc/init.rc.
+    # Enable it here for projects w/o choice_fn.
+    start recovery

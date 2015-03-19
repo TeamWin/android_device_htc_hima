@@ -1,0 +1,25 @@
+on boot
+    write /sys/class/android_usb/android0/f_ffs/on 1
+    start adbd
+    write /sys/class/android_usb/android0/f_adb/on 1
+    setprop sys.usb.state ${sys.usb.config}
+
+    start chargeled
+
+on property:sys.usb.config=mass_storage,adb
+    write /sys/devices/platform/android_usb/usb_function_switch 3
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=mtp,adb
+    write /sys/devices/platform/android_usb/usb_function_switch 130
+    setprop sys.usb.state ${sys.usb.config}
+
+service chargeled /sbin/chargeled
+    disabled
+
+service detect_key /sbin/detect_key
+    disabled
+    oneshot
+
+service offmode_charging /sbin/offmode_charging
+    disabled
