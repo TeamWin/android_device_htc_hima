@@ -20,6 +20,12 @@
 # definition file).
 #
 
+# Model Ids
+# 0PJA10000 - HTC Europe
+# 0PJA11000 - AT&T
+# 0PJA20000 - Sprint
+# 0PJA30000 - Verizon
+
 BOARD_VENDOR := htc
 
 # Bootloader

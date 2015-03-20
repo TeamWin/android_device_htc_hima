@@ -66,8 +66,8 @@ void vendor_load_properties()
         property_set("ro.product.model", "HTC6535LVW");
         property_set("ro.build.product", "htc_himawl");
     } else {
-        /* m9uhl (himauhl) */
-        property_set("ro.product.device", "htc_himauhl");
+        /* m9ul (himaul) */
+        property_set("ro.product.device", "htc_himaul");
         property_set("ro.product.model", "HTC One M9");
         property_set("ro.telephony.default_network", "9");
         property_set("telephony.lteOnGsmDevice", "1");
