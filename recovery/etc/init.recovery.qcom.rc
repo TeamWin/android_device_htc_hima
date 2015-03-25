@@ -16,10 +16,13 @@ on property:sys.usb.config=mtp,adb
 
 service chargeled /sbin/chargeled
     disabled
+    seclabel u:r:healthd:s0
 
 service detect_key /sbin/detect_key
     disabled
     oneshot
+    seclabel u:r:healthd:s0
 
 service offmode_charging /sbin/offmode_charging
     disabled
+    seclabel u:r:healthd:s0
