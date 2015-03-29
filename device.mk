@@ -29,6 +29,8 @@ PRODUCT_PACKAGES += \
 # Recovery
 PRODUCT_PACKAGES += \
     chargeled \
+    fstab_swap.sh \
+    recovery.fstab.system_ro \
     init.recovery.htc_hima.rc \
     init.recovery.common.rc \
     init.recovery.qcom.rc \

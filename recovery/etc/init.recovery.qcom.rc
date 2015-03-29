@@ -5,6 +5,7 @@ on boot
     setprop sys.usb.state ${sys.usb.config}
 
     start chargeled
+    start fstab_swap
 
 on property:sys.usb.config=mass_storage,adb
     write /sys/devices/platform/android_usb/usb_function_switch 3
@@ -26,3 +27,7 @@ service detect_key /sbin/detect_key
 service offmode_charging /sbin/offmode_charging
     disabled
     seclabel u:r:healthd:s0
+
+service fstab_swap /sbin/fstab_swap.sh
+    oneshot
+    disabled
