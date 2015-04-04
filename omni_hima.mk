@@ -13,5 +13,5 @@ $(call inherit-product, vendor/omni/config/common.mk)
 PRODUCT_DEVICE := hima
 PRODUCT_NAME := omni_hima
 PRODUCT_BRAND := htc
-PRODUCT_MODEL := HTC One M9
+#PRODUCT_MODEL := HTC One M9
 PRODUCT_MANUFACTURER := htc

@@ -56,9 +56,9 @@ void vendor_load_properties()
     if (strstr(bootmid, "0PJA20000")) {
         /* m9whl (himawhl) */
         cdma_properties("1", "8", "310120", "Sprint");
-        property_set("ro.product.device", "htc_himawhl");
-        property_set("ro.product.model", "0PJA2");
         property_set("ro.build.product", "htc_himawhl");
+        property_set("ro.product.model", "0PJA2");
+        property_set("ro.product.device", "htc_himawhl");
     } else if (strstr(bootmid, "0PJA30000")) {
         /* m9wl (himawl) */
         cdma_properties("0", "10", "310012", "Verizon");
@@ -67,6 +67,7 @@ void vendor_load_properties()
         property_set("ro.build.product", "htc_himawl");
     } else {
         /* m9ul (himaul) */
+        property_set("ro.build.product", "htc_himaul");
         property_set("ro.product.device", "htc_himaul");
         property_set("ro.product.model", "HTC One M9");
         property_set("ro.telephony.default_network", "9");
