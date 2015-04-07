@@ -1,13 +1,12 @@
 on boot
-    write /sys/class/android_usb/android0/f_ffs/on 1
-    start adbd
-    write /sys/class/android_usb/android0/f_adb/on 1
-    setprop sys.usb.state ${sys.usb.config}
+    write /sys/devices/platform/android_usb/usb_function_switch 130
 
     start chargeled
     start fstab_swap
 
-on property:sys.usb.config=mass_storage,adb
+on property:sys.usb.config=adb
+    write /sys/class/android_usb/android0/f_ffs/on 1
+    write /sys/class/android_usb/android0/f_adb/on 1
     write /sys/devices/platform/android_usb/usb_function_switch 3
     setprop sys.usb.state ${sys.usb.config}
 
