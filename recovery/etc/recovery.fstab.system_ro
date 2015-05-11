@@ -1,11 +1,11 @@
 # mount point   fstype  device					device2			flags
-#/misc		emmc	/dev/block/bootdevice/by-name/misc
+/misc		emmc	/dev/block/bootdevice/by-name/misc
 /boot		emmc	/dev/block/bootdevice/by-name/boot
-/cache		ext4	/dev/block/bootdevice/by-name/cache				flags=display="Cache"
-/system		emmc	/dev/block/bootdevice/by-name/system				flags=display="System";backup=1
+/cache		ext4	/dev/block/bootdevice/by-name/cache
+/system		emmc	/dev/block/bootdevice/by-name/system				flags=backup=1
 /data		ext4	/dev/block/bootdevice/by-name/userdata	  length=-16384		flags=encryptable=/dev/block/bootdevice/by-name/extra
 /devlog 	ext4	/dev/block/bootdevice/by-name/devlog
-/recovery 	emmc	/dev/block/bootdevice/by-name/recovery				flags=display="Recovery"
+/recovery 	emmc	/dev/block/bootdevice/by-name/recovery				flags=backup=1
 
 # Removable storage
 /external_sd	vfat	/dev/block/mmcblk1p1			/dev/block/mmcblk1	flags=display="Micro SDcard";storage;wipeingui;removable;andsec
