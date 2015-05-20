@@ -85,6 +85,7 @@ TW_THEME := portrait_hdpi
 #TW_INCLUDE_DUMLOCK := true
 TW_HAS_DOWNLOAD_MODE := true
 TW_INCLUDE_CRYPTO := true
+TW_NO_EXFAT_FUSE := true
 TW_NO_SCREEN_BLANK := true
 TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
 

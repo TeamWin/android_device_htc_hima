@@ -1,3 +1,7 @@
+on early-init
+    # exfat
+    insmod /system/lib/modules/texfat.ko
+
 on boot
     write /sys/devices/platform/android_usb/usb_function_switch 130
 
