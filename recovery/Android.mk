@@ -74,22 +74,6 @@ LOCAL_MODULE_PATH	:= $(PRODUCT_OUT)
 include $(BUILD_PREBUILT)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE		:= recovery.fstab.system_ro
-LOCAL_MODULE_TAGS	:= optional eng
-LOCAL_MODULE_CLASS	:= ETC
-LOCAL_SRC_FILES		:= etc/recovery.fstab.system_ro
-LOCAL_MODULE_PATH	:= $(TARGET_RECOVERY_ROOT_OUT)/etc
-include $(BUILD_PREBUILT)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE		:= fstab_swap.sh
-LOCAL_MODULE_TAGS	:= optional eng
-LOCAL_MODULE_CLASS	:= ETC
-LOCAL_SRC_FILES		:= sbin/fstab_swap.sh
-LOCAL_MODULE_PATH	:= $(TARGET_RECOVERY_ROOT_OUT)/sbin
-include $(BUILD_PREBUILT)
-
-include $(CLEAR_VARS)
 LOCAL_MODULE		:= texfat.ko
 LOCAL_MODULE_TAGS	:= optional eng
 LOCAL_MODULE_CLASS	:= ETC
