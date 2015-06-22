@@ -28,13 +28,7 @@ PRODUCT_PACKAGES += \
 
 # Recovery
 PRODUCT_PACKAGES += \
-    chargeled \
-    init.recovery.htc_hima.rc \
-    init.recovery.common.rc \
-    init.recovery.qcom.rc \
-    offmode_charging_res_images \
-    dt.img \
-    texfat.ko
+    chargeled
 PRODUCT_COPY_FILES += \
     bionic/libc/zoneinfo/tzdata:recovery/root/system/usr/share/zoneinfo/tzdata
 

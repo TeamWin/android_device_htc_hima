@@ -4,9 +4,7 @@ on early-init
 
 on boot
     write /sys/devices/platform/android_usb/usb_function_switch 130
-
     start chargeled
-    start fstab_swap
 
 on property:sys.usb.config=adb
     write /sys/class/android_usb/android0/f_ffs/on 1
@@ -30,7 +28,3 @@ service detect_key /sbin/detect_key
 service offmode_charging /sbin/offmode_charging
     disabled
     seclabel u:r:healthd:s0
-
-service fstab_swap /sbin/fstab_swap.sh
-    oneshot
-    disabled
