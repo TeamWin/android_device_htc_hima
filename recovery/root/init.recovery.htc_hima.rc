@@ -1,6 +1,10 @@
-on early-init
+on init
     # exfat
     insmod /system/lib/modules/texfat.ko
+
+on offmode_charging
+    start detect_key
+    start offmode_charging
 
 on boot
     write /sys/devices/platform/android_usb/usb_function_switch 130
