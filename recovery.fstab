@@ -1,14 +1,17 @@
 # mount point   fstype  device					device2			flags
-/misc		emmc	/dev/block/bootdevice/by-name/misc
-/boot		emmc	/dev/block/bootdevice/by-name/boot
-/cache		ext4	/dev/block/bootdevice/by-name/cache
 /system		ext4	/dev/block/bootdevice/by-name/system
 /system_image	emmc	/dev/block/bootdevice/by-name/system
+/cache		ext4	/dev/block/bootdevice/by-name/cache
 /data		ext4	/dev/block/bootdevice/by-name/userdata				flags=encryptable=/dev/block/bootdevice/by-name/extra
-/devlog 	ext4	/dev/block/bootdevice/by-name/devlog
+/boot		emmc	/dev/block/bootdevice/by-name/boot
 /recovery 	emmc	/dev/block/bootdevice/by-name/recovery				flags=backup=1
+/misc 		emmc	/dev/block/bootdevice/by-name/misc
+/devlog 	ext4	/dev/block/bootdevice/by-name/devlog
+/carrier 	ext4	/dev/block/bootdevice/by-name/carrier
+/cota		ext4	/dev/block/bootdevice/by-name/cota
+/preload	ext4	/dev/block/bootdevice/by-name/apppreload
 
 # Removable storage
-/external_sd	vfat	/dev/block/mmcblk1p1			/dev/block/mmcblk1	flags=display="Micro SDcard";storage;wipeingui;removable;andsec
+/external_sd	vfat	/dev/block/mmcblk1p1			/dev/block/mmcblk1	flags=display="Micro SDcard";storage;wipeingui;removable
 /usb_otg	vfat	/dev/block/sda1				/dev/block/sda		flags=display="USB-OTG";storage;wipeingui;removable
 /sd-ext		ext4	/dev/block/mmcblk1p2						flags=display="SD-Ext";wipeingui;removable
