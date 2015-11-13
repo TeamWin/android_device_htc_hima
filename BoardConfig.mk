@@ -85,9 +85,6 @@ TW_NO_EXFAT_FUSE := true
 TW_NO_SCREEN_BLANK := true
 TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
 
-# USB
-TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/soc.0/f9200000.ssusb/f9200000.dwc3/gadget/lun%d/file
-
 # Vendor Init
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 TARGET_UNIFIED_DEVICE := true
