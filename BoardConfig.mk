@@ -88,5 +88,5 @@ TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
 # Vendor Init
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 TARGET_UNIFIED_DEVICE := true
-TARGET_INIT_VENDOR_LIB := libinit_hima
+TARGET_INIT_VENDOR_LIB := libinit_msm
 TARGET_LIBINIT_DEFINES_FILE := device/htc/hima/init/init_hima.c

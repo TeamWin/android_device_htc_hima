@@ -30,5 +30,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     chargeled
 PRODUCT_COPY_FILES += \
+    device/htc/hima/recovery/kernel:kernel \
     bionic/libc/zoneinfo/tzdata:recovery/root/system/usr/share/zoneinfo/tzdata
 
