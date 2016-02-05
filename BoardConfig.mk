@@ -74,16 +74,16 @@ BOARD_RECOVERY_SWIPE := true
 BOARD_SUPPRESS_SECURE_ERASE := true
 BOARD_USES_MMCUTILS := true
 TARGET_PREBUILT_KERNEL := device/htc/hima/recovery/kernel
-TARGET_RECOVERY_PIXEL_FORMAT := "RGB_565"
-RECOVERY_GRAPHICS_USE_LINELENGTH := true
 
 # TWRP Build Flags
 TW_THEME := portrait_hdpi
 TW_HAS_DOWNLOAD_MODE := true
-TW_INCLUDE_CRYPTO := true
+#TW_INCLUDE_CRYPTO := true
 TW_NO_EXFAT_FUSE := true
-TW_NO_SCREEN_BLANK := true
-TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
+#TARGET_RECOVERY_DEVICE_MODULES := twrpdec
+#TW_RECOVERY_ADDITIONAL_RELINK_FILES := $(OUT)/recovery/root/sbin/twrpdec
+#TARGET_USES_LOGD := true
+#TWRP_INCLUDE_LOGCAT := true
 
 # Vendor Init
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
