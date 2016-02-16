@@ -2,41 +2,104 @@ on init
     # exfat
     insmod /system/lib/modules/texfat.ko
 
-#on fs
+on fs
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 0bb4
+    write /sys/class/android_usb/android0/idProduct 0f87
+    write /sys/class/android_usb/android0/f_ffs/aliases adb
+    write /sys/class/android_usb/android0/functions mtp,adb
+    write /sys/class/android_usb/android0/iManufacturer ${ro.product.manufacturer}
+    write /sys/class/android_usb/android0/iProduct ${ro.product.model}
+    write /sys/class/android_usb/android0/iSerial ${ro.serialno}
+
     # needed to make qseecomd work in recovery
-#    chmod 0666 /dev/qseecom
-#    chown system drmrpc /dev/qseecom
-#    chmod 0664 /dev/ion
-#    chown system system /dev/ion
+    chmod 0777 /dev/qseecom
+    #chown system drmrpc /dev/qseecom
+    chmod 0664 /dev/ion
+    chown system system /dev/ion
 
 on offmode_charging
     start detect_key
     start offmode_charging
 
 on boot
-    write /sys/devices/platform/android_usb/usb_function_switch 130
     start chargeled
 
-#on property:ro.crypto.state=encrypted
-#    start sbinqseecomd
+on property:ro.crypto.state=encrypted
+    start sbinqseecomd
 
+# Used to disable USB when switching states
+on property:sys.usb.config=none
+    stop adbd
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/bDeviceClass 0
+    setprop sys.usb.state ${sys.usb.config}
+
+# this is for M charge-only
+on property:sys.usb.config=charged
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 0bb4
+    write /sys/class/android_usb/android0/idProduct 0f0b
+    write /sys/class/android_usb/android0/functions charging
+    write /sys/class/android_usb/android0/enable 1
+    write /sys/devices/platform/android_usb/usb_function_switch 1048576
+    setprop sys.usb.state ${sys.usb.config}
+
+# this is for M charge-only but USB debugging is on, we switch to adb
+on property:sys.usb.config=charged,adb
+    stop adbd
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 0bb4
+    write /sys/class/android_usb/android0/idProduct 0c81
+    write /sys/class/android_usb/android0/functions adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    write /sys/devices/platform/android_usb/usb_function_switch 2
+    setprop sys.usb.state ${sys.usb.config}
+
+# adb only USB configuration
+# This is the fallback configuration if the
+# USB manager fails to set a standard configuration
 on property:sys.usb.config=adb
-    write /sys/class/android_usb/android0/f_ffs/on 1
-    write /sys/class/android_usb/android0/f_adb/on 1
+    stop adbd
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 0bb4
+    write /sys/class/android_usb/android0/idProduct 0c81
+    write /sys/class/android_usb/android0/functions adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    write /sys/devices/platform/android_usb/usb_function_switch 2
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=mass_storage,adb
+    stop adbd
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 0bb4
+    write /sys/class/android_usb/android0/idProduct 0c02
+    write /sys/class/android_usb/android0/functions mass_storage,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
     write /sys/devices/platform/android_usb/usb_function_switch 3
     setprop sys.usb.state ${sys.usb.config}
 
 on property:sys.usb.config=mtp,adb
+    stop adbd
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 0bb4
+    write /sys/class/android_usb/android0/idProduct 0f87
+    write /sys/class/android_usb/android0/functions mtp,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
     write /sys/devices/platform/android_usb/usb_function_switch 130
     setprop sys.usb.state ${sys.usb.config}
 
 # separate copy needed to use /sbin/linker64 instead of /system/bin/linker64
-#service sbinqseecomd /sbin/qseecomd
-#    oneshot
-#    disabled
-#    user root
-#    group root
-#    seclabel u:r:recovery:s0
+service sbinqseecomd /sbin/qseecomd
+    oneshot
+    disabled
+    user root
+    group root
+    seclabel u:r:recovery:s0
 
 service chargeled /sbin/chargeled
     disabled
@@ -44,8 +107,8 @@ service chargeled /sbin/chargeled
 
 service detect_key /sbin/detect_key
     disabled
-    oneshot
     seclabel u:r:healthd:s0
+    oneshot
 
 service offmode_charging /sbin/offmode_charging
     disabled

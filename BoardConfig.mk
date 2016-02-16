@@ -51,11 +51,10 @@ TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := generic
 
 # Kernel
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 user_debug=31 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 earlyprintk=msm_hsl_uart,0xf991e000 androidboot.hardware=htc_hima androidusb.pid=0x065d androidkey.dummy=1 androidtouch.htc_event=1 disk_mode_enable=1 androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 user_debug=31 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 androidboot.hardware=htc_hima androidusb.pid=0x065e androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x00078000
 BOARD_KERNEL_PAGESIZE := 4096
-BOARD_KERNEL_SEPARATED_DT := true
-BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x01f88000 --tags_offset 0x01d88000 --dt device/htc/hima/recovery/dt.img
+BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x01f88000 --tags_offset 0x01d88000
 
 # Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
@@ -77,16 +76,14 @@ TARGET_PREBUILT_KERNEL := device/htc/hima/recovery/kernel
 
 # TWRP Build Flags
 TW_THEME := portrait_hdpi
+TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_HAS_DOWNLOAD_MODE := true
-#TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_CRYPTO := true
 TW_NO_EXFAT_FUSE := true
-#TARGET_RECOVERY_DEVICE_MODULES := twrpdec
-#TW_RECOVERY_ADDITIONAL_RELINK_FILES := $(OUT)/recovery/root/sbin/twrpdec
-#TARGET_USES_LOGD := true
-#TWRP_INCLUDE_LOGCAT := true
+TW_NO_SCREEN_BLANK := true
 
 # Vendor Init
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 TARGET_UNIFIED_DEVICE := true
 TARGET_INIT_VENDOR_LIB := libinit_msm
-TARGET_LIBINIT_DEFINES_FILE := device/htc/hima/init/init_hima.c
+TARGET_LIBINIT_DEFINES_FILE := device/htc/hima/init/init_hima.cpp
