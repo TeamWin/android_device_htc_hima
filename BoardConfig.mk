@@ -73,6 +73,7 @@ BOARD_RECOVERY_SWIPE := true
 BOARD_SUPPRESS_SECURE_ERASE := true
 BOARD_USES_MMCUTILS := true
 TARGET_PREBUILT_KERNEL := device/htc/hima/recovery/kernel
+TARGET_RECOVERY_DEVICE_MODULES := chargeled
 
 # TWRP Build Flags
 TW_THEME := portrait_hdpi
