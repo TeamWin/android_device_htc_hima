@@ -3,7 +3,7 @@ TeamWin Recovery Project
 Device files for HTC One (M9)
 Codename: Hima
 
-Builds with OmniROM android-5.1 tree
+Builds with OmniROM android-6.0 tree
 
 cat proc/emmc:
 dev:        size     erasesize name
