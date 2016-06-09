@@ -21,10 +21,10 @@
 # lines, full and maguro, hence its name.
 #
 
-# Inherit m8-specific vendor tree
+# Inherit hima-specific vendor tree
 $(call inherit-product-if-exists, vendor/htc/hima/hima-vendor.mk)
 
-# Inherit from m8
+# Inherit from hima
 $(call inherit-product, device/htc/hima/device.mk)
 
 PRODUCT_NAME := full_hima
