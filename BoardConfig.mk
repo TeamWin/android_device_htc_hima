@@ -51,10 +51,10 @@ TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := generic
 
 # Kernel
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 user_debug=31 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 androidboot.hardware=htc_hima androidusb.pid=0x065e androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 user_debug=31 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 boot_cpus=0-5 androidboot.hardware=htc_hima androidkey.dummy=1 androidusb.pid=0x065e androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x00078000
 BOARD_KERNEL_PAGESIZE := 4096
-BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x01f88000 --tags_offset 0x01d88000
+BOARD_MKBOOTIMG_ARGS := --board recovery:0 --kernel_offset 0x00008000 --ramdisk_offset 0x01f88000 --tags_offset 0x01d88000
 
 # Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
@@ -65,6 +65,9 @@ BOARD_FLASH_BLOCK_SIZE := 262144 # (BOARD_KERNEL_PAGESIZE * 64)
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
+# Keymaster
+TARGET_HW_DISK_ENCRYPTION := true
+
 # Recovery
 BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_MISC_PARTITION := true
@@ -72,7 +75,7 @@ BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_RECOVERY_SWIPE := true
 BOARD_SUPPRESS_SECURE_ERASE := true
 BOARD_USES_MMCUTILS := true
-TARGET_PREBUILT_KERNEL := device/htc/hima/recovery/kernel
+TARGET_PREBUILT_KERNEL := device/htc/hima/kernel
 TARGET_RECOVERY_DEVICE_MODULES := chargeled
 
 # TWRP Build Flags
@@ -80,11 +83,19 @@ TW_THEME := portrait_hdpi
 TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_HAS_DOWNLOAD_MODE := true
 TW_INCLUDE_CRYPTO := true
+TW_CRYPTO_USE_SYSTEM_VOLD := qseecomd
 TW_NO_EXFAT_FUSE := true
 TW_NO_SCREEN_BLANK := true
 
+# TWRP Debugging
+#TWRP_EVENT_LOGGING := true
+#TARGET_USES_LOGD := true
+#TWRP_INCLUDE_LOGCAT := true
+#TARGET_RECOVERY_DEVICE_MODULES += strace
+#TW_RECOVERY_ADDITIONAL_RELINK_FILES := $(OUT)/system/xbin/strace
+#TW_CRYPTO_SYSTEM_VOLD_DEBUG := true
+#TW_CRYPTO_SYSTEM_VOLD_DISABLE_TIMEOUT := true
+
 # Vendor Init
-TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 TARGET_UNIFIED_DEVICE := true
-TARGET_INIT_VENDOR_LIB := libinit_msm
-TARGET_LIBINIT_DEFINES_FILE := device/htc/hima/init/init_hima.cpp
+TARGET_INIT_VENDOR_LIB := libinit_hima
