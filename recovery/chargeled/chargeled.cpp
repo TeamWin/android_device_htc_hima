@@ -33,9 +33,12 @@
 #define BATTERY_STATUS_FILE "/sys/class/power_supply/battery/status"
 #define AMBER_LED "/sys/class/leds/amber/brightness"
 #define GREEN_LED "/sys/class/leds/green/brightness"
+#define RGB_LED "/sys/class/leds/indicator/ModeRGB"
 
 #define LED_OFF "0"
 #define LED_ON "1"
+#define LED_CHARGING "1c80000"
+#define LED_CHARGED "100c800"
 
 #define STR_BUF_SIZE 128
 #define UEVENT_BUF_SIZE 64*1024
@@ -52,7 +55,7 @@ enum {
 };
 
 struct sysfs_string_enum_map {
-    char* str;
+    const char* str;
     int val;
 } battery_status_map[] = {
     { "Unknown", BATTERY_STATUS_UNKNOWN },
@@ -115,42 +118,74 @@ static int get_charging_status() {
 }
 
 static void update_led(int charge_status) {
-    FILE *aled, *gled;
-    aled = fopen(AMBER_LED, "w");
-    if (!aled) {
-        KLOG_ERROR(LOG_TAG, "%s: could not open amber LED: %s\n",
-            __func__, AMBER_LED);
-        return;
-    } else {
-        gled = fopen(GREEN_LED, "w");
-        if (!gled) {
-            fclose(aled);
-            KLOG_ERROR(LOG_TAG, "%s: could not open green LED: %s\n",
-                __func__, GREEN_LED);
+    FILE *aled = NULL, *gled = NULL, *rgbled = NULL;
+    bool is_rgbled;
+
+    is_rgbled = (access(RGB_LED, F_OK) == 0);
+    KLOG_INFO(LOG_TAG, "%s: is RGB LED='%d'\n",
+            __func__, is_rgbled);
+
+    if (is_rgbled) {
+        rgbled = fopen(RGB_LED, "w");
+        if (!rgbled) {
+            KLOG_ERROR(LOG_TAG, "%s: could not open RGB LED: %s errno=%i (%s)\n",
+                __func__, RGB_LED, errno, strerror(errno));
             return;
+        }
+    } else {
+        aled = fopen(AMBER_LED, "w");
+        if (!aled) {
+            KLOG_ERROR(LOG_TAG, "%s: could not open amber LED: %s errno=%i (%s)\n",
+                __func__, AMBER_LED, errno, strerror(errno));
+            return;
+        } else {
+            gled = fopen(GREEN_LED, "w");
+            if (!gled) {
+                fclose(aled);
+                KLOG_ERROR(LOG_TAG, "%s: could not open green LED: %s errno=%i (%s)\n",
+                    __func__, GREEN_LED, errno, strerror(errno));
+                return;
+            }
         }
     }
 
     KLOG_INFO(LOG_TAG, "%s: setting charging status '%d'\n",
             __func__, charge_status);
 
-    switch (charge_status) {
-        case BATTERY_STATUS_CHARGING:
-            fputs(LED_ON, aled);
-            fputs(LED_OFF, gled);
-            break;
-        case BATTERY_STATUS_FULL:
-            fputs(LED_OFF, aled);
-            fputs(LED_ON, gled);
-            break;
-        default:
-            fputs(LED_OFF, aled);
-            fputs(LED_OFF, gled);
-            break;
-    }
+    if (is_rgbled) {
+        switch (charge_status) {
+            case BATTERY_STATUS_CHARGING:
+                fputs(LED_CHARGING, rgbled);
+                break;
+            case BATTERY_STATUS_FULL:
+                fputs(LED_CHARGED, rgbled);
+                break;
+            default:
+                fputs(LED_OFF, rgbled);
+                break;
+        }
 
-    fclose(aled);
-    fclose(gled);
+        fclose(rgbled);
+
+    } else {
+        switch (charge_status) {
+            case BATTERY_STATUS_CHARGING:
+                fputs(LED_ON, aled);
+                fputs(LED_OFF, gled);
+                break;
+            case BATTERY_STATUS_FULL:
+                fputs(LED_OFF, aled);
+                fputs(LED_ON, gled);
+                break;
+            default:
+                fputs(LED_OFF, aled);
+                fputs(LED_OFF, gled);
+                break;
+        }
+
+        fclose(aled);
+        fclose(gled);
+    }
 }
 
 static void chargeled_update() {

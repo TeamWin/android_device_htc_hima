@@ -34,6 +34,84 @@
 #include "log.h"
 #include "util.h"
 
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <sys/mount.h>
+
+#define DEV_BLOCK_SYSTEM "/dev/block/bootdevice/by-name/system"
+
+void set_props_from_file(const char *filename)
+{
+    int IsSet_ro_product_device = 0;
+    FILE *fp = fopen(filename, "r");
+
+    if (fp) {
+        char line[1024];
+
+        char propname[PROP_NAME_MAX];
+        char propvalue[PROP_VALUE_MAX];
+        char *pch;
+
+        while ((fgets(line, sizeof(line), fp))) {
+            if (line[0] == '\n' || line[0] == '#') continue;
+
+            pch = strtok(line, "=\n");
+            if (!pch || strlen(pch) >= PROP_NAME_MAX) continue;
+            strcpy(propname, pch);
+
+            pch = strtok(NULL, "=\n");
+            if (!pch || strlen(pch) >= PROP_VALUE_MAX) continue;
+            strcpy(propvalue, pch);
+
+            if (strcmp(propname, "ro.build.fingerprint") == 0) {
+                property_set(propname, propvalue);
+            }
+            else if (strcmp(propname, "ro.product.device") == 0) {
+                property_set(propname, propvalue);
+                IsSet_ro_product_device = 1;
+            }
+        }
+        fclose(fp);
+    }
+
+    if (!IsSet_ro_product_device) {
+#ifdef GETPROP_RETURNS_STRING
+        std::string propvalue;
+        propvalue = property_get("ro.build.product");
+        property_set("ro.product.device", propvalue.c_str());
+#else
+        char propvalue[PROP_VALUE_MAX];
+        property_get("ro.build.product", propvalue);
+        property_set("ro.product.device", propvalue);
+#endif
+    }
+}
+
+void set_props_from_build(void)
+{
+    if (access("/system/build.prop", R_OK) == 0) {
+        set_props_from_file("/system/build.prop");
+        return;
+    }
+
+    if (mkdir("/tmpsys", 777) != 0)
+        return;
+
+    int is_mounted = mount(DEV_BLOCK_SYSTEM, "/tmpsys", "ext4", MS_RDONLY | MS_NOATIME , "") == 0;
+
+    if (!is_mounted)
+        is_mounted = mount(DEV_BLOCK_SYSTEM, "/tmpsys", "f2fs", MS_RDONLY | MS_NOATIME , "") == 0;
+
+    if (is_mounted) {
+        set_props_from_file("/tmpsys/build.prop");
+        umount("/tmpsys");
+    }
+    rmdir("/tmpsys");
+}
+
 void common_properties()
 {
     property_set("rild.libargs", "-d /dev/smd0");
@@ -64,7 +142,7 @@ void gsm_properties(char const default_network[])
     property_set("telephony.lteOnGsmDevice", "1");
 }
 
-void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *board_type)
+void vendor_load_properties()
 {
     char platform[PROP_VALUE_MAX];
     char bootmid[PROP_VALUE_MAX];
@@ -83,12 +161,10 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
         cdma_properties("1", "8");
         property_set("ro.build.product", "htc_himawhl");
         property_set("ro.product.model", "0PJA2");
-        property_set("ro.product.device", "htc_himawhl");
     } else if (strstr(bootmid, "0PJA30000")) {
         /* m9wl (himawl) */
         common_properties();
         cdma_properties("0", "10");
-        property_set("ro.product.device", "htc_himawl");
         property_set("ro.product.model", "HTC6535LVW");
         property_set("ro.build.product", "htc_himawl");
     } else {
@@ -96,9 +172,10 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
         common_properties();
         gsm_properties("9");
         property_set("ro.build.product", "htc_himaul");
-        property_set("ro.product.device", "htc_himaul");
         property_set("ro.product.model", "HTC One M9");
     }
+
+    set_props_from_build();
 
     property_get("ro.product.device", device);
     ERROR("Found bootmid %s setting build properties for %s device\n", bootmid, device);

@@ -1,2 +1,0 @@
-add_lunch_combo omni_hima-userdebug
-add_lunch_combo omni_hima-eng
