@@ -21,11 +21,11 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_C_INCLUDES := system/core/init
 LOCAL_CFLAGS := -Wall -DANDROID_TARGET=\"$(TARGET_BOARD_PLATFORM)\"
 
-ifeq ($(shell test $(PLATFORM_SDK_VERSION) -gt 23; echo $$?),0)
-    LOCAL_CFLAGS += -DGETPROP_RETURNS_STRING
-endif
+LOCAL_C_INCLUDES += device/qcom/htc-common/init
+LOCAL_WHOLE_STATIC_LIBRARIES += libinit_htcCommon
 
-LOCAL_SRC_FILES := init_hima.cpp
-LOCAL_MODULE := libinit_hima
+LOCAL_SRC_FILES := init_$(TARGET_DEVICE).cpp
+
+LOCAL_MODULE := libinit_$(TARGET_DEVICE)
 
 include $(BUILD_STATIC_LIBRARY)
