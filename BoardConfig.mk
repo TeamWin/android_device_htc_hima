@@ -54,7 +54,7 @@ TARGET_2ND_CPU_VARIANT := generic
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 user_debug=31 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 boot_cpus=0-5 androidboot.hardware=htc_hima androidkey.dummy=1 androidusb.pid=0x065e androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x00078000
 BOARD_KERNEL_PAGESIZE := 4096
-BOARD_MKBOOTIMG_ARGS := --board recovery:0 --kernel_offset 0x00008000 --ramdisk_offset 0x01f88000 --tags_offset 0x01d88000
+BOARD_MKBOOTIMG_ARGS := --board recovery:0 --kernel_offset 0x00008000 --ramdisk_offset 0x01f88000 --tags_offset 0x01d88000 --dt device/$(BOARD_VENDOR)/$(TARGET_DEVICE)/prebuilt/dt.img_oreo-lineage
 
 # Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
@@ -67,6 +67,8 @@ TARGET_USERIMAGES_USE_F2FS := true
 
 # Keymaster
 TARGET_HW_DISK_ENCRYPTION := true
+#PLATFORM_VERSION := 8.1.0
+#PLATFORM_SECURITY_PATCH := 2018-06-05
 
 # Recovery
 BOARD_HAS_LARGE_FILESYSTEM := true
@@ -75,17 +77,23 @@ BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_RECOVERY_SWIPE := true
 BOARD_SUPPRESS_SECURE_ERASE := true
 BOARD_USES_MMCUTILS := true
-TARGET_PREBUILT_KERNEL := device/htc/$(TARGET_DEVICE)/kernel
-TARGET_RECOVERY_DEVICE_MODULES := chargeled
+TARGET_PREBUILT_KERNEL := device/$(BOARD_VENDOR)/$(TARGET_DEVICE)/prebuilt/Image.gz_oreo-lineage
+TARGET_RECOVERY_DEVICE_MODULES := chargeled liblog_htc_sbin tzdata
 
 # TWRP Build Flags
 TW_THEME := portrait_hdpi
+TW_DEFAULT_BRIGHTNESS := 125
 TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_HAS_DOWNLOAD_MODE := true
 TW_INCLUDE_CRYPTO := true
-TW_CRYPTO_USE_SYSTEM_VOLD := qseecomd
+TW_CRYPTO_USE_SYSTEM_VOLD := qseecomd hwservicemanager keymaster-3-0
 TW_NO_EXFAT_FUSE := true
 TW_NO_SCREEN_BLANK := true
+TW_RECOVERY_ADDITIONAL_RELINK_FILES := $(OUT)/system/usr/share/zoneinfo/tzdata
+
+# Additional modules and relink files for resetprop
+TARGET_RECOVERY_DEVICE_MODULES += libsqlite libicuuc libicui18n
+TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/lib64/libsqlite.so $(OUT)/system/lib64/libicuuc.so $(OUT)/system/lib64/libicui18n.so
 
 # TWRP Debugging
 #TWRP_EVENT_LOGGING := true
@@ -99,3 +107,6 @@ TW_NO_SCREEN_BLANK := true
 # Vendor Init
 TARGET_UNIFIED_DEVICE := true
 TARGET_INIT_VENDOR_LIB := libinit_$(TARGET_DEVICE)
+
+# Additional sepolicy for hwservicemanager
+BOARD_SEPOLICY_DIRS += device/$(BOARD_VENDOR)/$(TARGET_DEVICE)/sepolicy
