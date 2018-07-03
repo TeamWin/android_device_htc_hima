@@ -1,0 +1,11 @@
+#
+# Define common prefixes for access vectors
+#
+# common common_name { permission_name ... }
+
+class hwservice_manager
+{
+	add
+	find
+	list
+}

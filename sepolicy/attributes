@@ -1,0 +1,5 @@
+######################################
+# Attribute declarations
+#
+
+attribute hwservice_manager_type;

@@ -1,4 +1,4 @@
-import /init.recovery.htc_decrypt.rc
+import /init.recovery.qcom_decrypt.rc
 
 on init
     # exfat
