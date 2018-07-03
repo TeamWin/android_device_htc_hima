@@ -92,8 +92,8 @@ TW_NO_SCREEN_BLANK := true
 TW_RECOVERY_ADDITIONAL_RELINK_FILES := $(OUT)/system/usr/share/zoneinfo/tzdata
 
 # Additional modules and relink files for resetprop
-TARGET_RECOVERY_DEVICE_MODULES += libsqlite libicuuc libicui18n
-TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/lib64/libsqlite.so $(OUT)/system/lib64/libicuuc.so $(OUT)/system/lib64/libicui18n.so
+TARGET_RECOVERY_DEVICE_MODULES += libicuuc libicui18n # libsqlite
+TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/lib64/libicuuc.so $(OUT)/system/lib64/libicui18n.so # $(OUT)/system/lib64/libsqlite.so
 
 # TWRP Debugging
 #TWRP_EVENT_LOGGING := true
