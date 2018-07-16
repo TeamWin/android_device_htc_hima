@@ -67,8 +67,6 @@ TARGET_USERIMAGES_USE_F2FS := true
 
 # Keymaster
 TARGET_HW_DISK_ENCRYPTION := true
-#PLATFORM_VERSION := 8.1.0
-#PLATFORM_SECURITY_PATCH := 2018-06-05
 
 # Recovery
 BOARD_HAS_LARGE_FILESYSTEM := true
@@ -90,10 +88,6 @@ TW_CRYPTO_USE_SYSTEM_VOLD := qseecomd hwservicemanager keymaster-3-0
 TW_NO_EXFAT_FUSE := true
 TW_NO_SCREEN_BLANK := true
 TW_RECOVERY_ADDITIONAL_RELINK_FILES := $(OUT)/system/usr/share/zoneinfo/tzdata
-
-# Additional modules and relink files for resetprop
-TARGET_RECOVERY_DEVICE_MODULES += libicuuc libicui18n # libsqlite
-TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/lib64/libicuuc.so $(OUT)/system/lib64/libicui18n.so # $(OUT)/system/lib64/libsqlite.so
 
 # TWRP Debugging
 #TWRP_EVENT_LOGGING := true
