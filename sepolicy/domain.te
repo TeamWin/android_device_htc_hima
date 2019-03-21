@@ -1,5 +1,0 @@
-# Rules for all domains.
-
-# TODO(b/34454312) remove this when the correct policy is in place
-allow domain default_android_hwservice:hwservice_manager { add find };
-allow domain hwservice_manager_type:hwservice_manager { add find };
