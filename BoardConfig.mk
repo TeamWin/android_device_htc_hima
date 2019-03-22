@@ -68,6 +68,11 @@ TARGET_USERIMAGES_USE_F2FS := true
 # Keymaster
 TARGET_HW_DISK_ENCRYPTION := true
 
+# Custom Platform Version and Security Patch
+# TWRP Defaults
+PLATFORM_VERSION := 16.1.0
+PLATFORM_SECURITY_PATCH := 2025-12-05
+
 # Recovery
 BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_MISC_PARTITION := true
