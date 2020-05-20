@@ -6,7 +6,7 @@ on fs
     chown system system /dev/ion
 
 on property:ro.crypto.state=encrypted
-    start patchlevel
+    start prepdecrypt
 
 on property:crypto.ready=1
     start sbinqseecomd
@@ -14,16 +14,21 @@ on property:crypto.ready=1
 on property:init.svc.sbinqseecomd=running && property:sys.listeners.registered=true
     start sbinhwservicemanager
 
+on property:init.svc.sbinqseecomd=running && property:vendor.sys.listeners.registered=true
+    start sbinhwservicemanager
+
 on property:init.svc.sbinhwservicemanager=running && property:hwservicemanager.ready=true
     start sbinkeymaster-3-0
+    start sbinkeymaster-3-0-qti
 
 on property:ro.crypto.fs_crypto_blkdev=*
     setprop crypto.ready 0
     stop sbinqseecomd
     stop sbinhwservicemanager
     stop sbinkeymaster-3-0
+    stop sbinkeymaster-3-0-qti
 
-service patchlevel /sbin/patchlevel.sh
+service prepdecrypt /sbin/prepdecrypt.sh
     user root
     group root
     disabled
@@ -33,7 +38,7 @@ service patchlevel /sbin/patchlevel.sh
 service sbinqseecomd /sbin/qseecomd
     user root
     group root
-    setenv LD_LIBRARY_PATH /vendor/lib64:/sbin
+    setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/sbin
     disabled
     oneshot
     seclabel u:r:recovery:s0
@@ -47,6 +52,13 @@ service sbinhwservicemanager /sbin/hwservicemanager
 service sbinkeymaster-3-0 /sbin/android.hardware.keymaster@3.0-service
     user root
     group root
-    setenv LD_LIBRARY_PATH /vendor/lib64:/sbin
+    setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/sbin
+    disabled
+    seclabel u:r:recovery:s0
+
+service sbinkeymaster-3-0-qti /sbin/android.hardware.keymaster@3.0-service-qti
+    user root
+    group root
+    setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/sbin
     disabled
     seclabel u:r:recovery:s0

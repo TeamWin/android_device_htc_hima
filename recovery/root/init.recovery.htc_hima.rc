@@ -1,5 +1,8 @@
 import /init.recovery.qcom.rc
 
+on init
+    export LD_PRELOAD /sbin/liblog_htc_sbin.so
+
 on offmode_charging
     start detect_key
     start offmode_charging

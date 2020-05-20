@@ -7,6 +7,7 @@ on fs
     write /sys/class/android_usb/android0/iManufacturer ${ro.product.manufacturer}
     write /sys/class/android_usb/android0/iProduct ${ro.product.model}
     write /sys/class/android_usb/android0/iSerial ${ro.serialno}
+    setprop sys.usb.ffs.aio_compat 1
 
 on property:sys.usb.config=none
     stop adbd
