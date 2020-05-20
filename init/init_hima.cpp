@@ -59,9 +59,6 @@ void vendor_load_properties() {
     std::string bootmid;
     std::string device;
 
-    if (platform != ANDROID_TARGET)
-        return;
-
     bootmid = android::base::GetProperty("ro.boot.mid", "");
 
     if (bootmid == "0PJA10000") {
