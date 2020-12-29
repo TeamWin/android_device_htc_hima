@@ -21,18 +21,21 @@
 # lines, full and maguro, hence its name.
 #
 
-# Release name
-PRODUCT_RELEASE_NAME := hima
+# Inherit from the common Open Source product configuration
+$(call inherit-product, $(SRC_TARGET_DIR)/product/embedded.mk)
 
-# Inherit some common Omni stuff
-$(call inherit-product, vendor/omni/config/common.mk)
+# HTC Charging LED support
+PRODUCT_PACKAGES += \
+    chargeled
 
-## Device identifier. This must come after all inclusions
-PRODUCT_DEVICE := $(PRODUCT_RELEASE_NAME)
-PRODUCT_NAME := omni_$(PRODUCT_DEVICE)
-PRODUCT_BRAND := htc
-PRODUCT_MODEL := $(shell echo $(PRODUCT_BRAND) | tr  '[:lower:]' '[:upper:]') One M9
-PRODUCT_MANUFACTURER := $(PRODUCT_BRAND)
+# Shim for HTC logging symbols
+PRODUCT_PACKAGES += \
+    liblog_htc_sbin
 
-# Inherit from hardware-specific part of the product configuration
-$(call inherit-product, device/$(PRODUCT_BRAND)/$(PRODUCT_DEVICE)/device.mk)
+# Qcom FDE decrypt support for TWRP
+PRODUCT_PACKAGES += \
+    qcom_decrypt
+
+# tzdata bionic error fix
+PRODUCT_PACKAGES += \
+    tzdata_twrp

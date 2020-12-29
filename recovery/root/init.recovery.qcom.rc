@@ -1,6 +1,5 @@
 import /init.recovery.qcom_decrypt.rc
 
-on init
+on fs
     wait /dev/block/platform/soc.0/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc.0/${ro.boot.bootdevice} /dev/block/bootdevice
-
